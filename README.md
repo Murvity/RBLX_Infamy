@@ -1,2 +1,3 @@
-# infamy
-Script for "Infamy" on Roblox
+# Roblox Infamy Script
+
+    
