@@ -2,18 +2,44 @@
 local Players = game:GetService("Players")
 local LocalPlyr = Players.LocalPlayer
 local PlayerGui = LocalPlyr.PlayerGui
+local Camera = Workspace.CurrentCamera
 
 local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 
 -- Placeholder variables
-local Cell, Remote, Weapon, originalCFrame, AutoSpawn, Spawning, Max_Crims, AutoUnlock
+local WS, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Spawning, Max_Crims, AutoUnlock
 
 -- Toggles
 local Refill_Ammo = false
 local AutoSpawn_AI = false
 local AutoUnlock_GP = false
 
+-- Some qol stuff before the main script
+function setWalkSpeed(Humanoid)
+    return Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+        if Humanoid.WalkSpeed ~= selected_WS and selected_WS ~= nil then
+            Humanoid.WalkSpeed = selected_WS
+        end
+    end)
+end
+
+function wsHandler(char)
+    local Humanoid = char:WaitForChild("Humanoid")
+
+    if WS then
+        WS:Disconnect()
+        WS = nil
+    end
+
+    WS = setWalkSpeed(Humanoid)
+end
+
+LocalPlyr.CharacterAdded:Connect(wsHandler)
+
+if LocalPlyr.Character then -- Initial set
+    wsHandler(LocalPlyr.Character)
+end
 
 -- Function to get cellphone tool
 function getCell()
@@ -47,8 +73,17 @@ function getAmmo(Weapon)
             if v:IsA("Part") and v.Name:find("buy.*PromptContainer") then
                 if v:FindFirstChild("ProximityPrompt2") then
                     if v.ProximityPrompt2.ActionText:find(Weapon) then
+
                         LocalPlyr.Character.HumanoidRootPart.CFrame = v.CFrame
                         v.ProximityPrompt2.HoldDuration = 0
+
+                        task.spawn(function()
+                            while Refill_Ammo do
+                                Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, v.Position)
+                                task.wait(0.01)
+                            end
+                        end)
+
                         while Refill_Ammo do
                             fireproximityprompt(v.ProximityPrompt2)
                             task.wait(0.01)
@@ -61,7 +96,7 @@ function getAmmo(Weapon)
         LocalPlyr.Character.HumanoidRootPart.CFrame = originalCFrame
     end
 end
-        
+
 
 
 
@@ -387,6 +422,7 @@ local ws_slider = misc:CreateSlider({
     default = 50,
     callback = function(v)
         LocalPlyr.Character.Humanoid.WalkSpeed = v 
+        selected_WS = v
     end
 })
 
