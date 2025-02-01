@@ -110,17 +110,7 @@ function spawnCrims()
     local function loop()
         loopStarted = true
 
-        local start = tick()
-        local amt = tonumber(Crim_Amount.Text) + 1
-
         Remote:FireServer("MouseBtn1", Max_Crims)
-
-        repeat
-            if tick() - start >= 2 then
-                loop()
-            end
-            task.wait(0.01)
-        until tonumber(Crim_Amount.Text) == amt
 
         loopStarted = false
     end
@@ -129,6 +119,7 @@ function spawnCrims()
         if not loopStarted then
             loop()
         end
+        task.wait(0.01)
     until tonumber(Crim_Amount.Text) == Max_Crims
 
     Spawning = false
@@ -385,7 +376,7 @@ local shops_melee = tp:CreateButton({
 ----------------------
 
 local loc_divider = tp:CreateDivider({
-    title = "Locations"
+    title = "EXTRAS"
 })
 
 local loc_dropdown = tp:CreateDropdown({
