@@ -8,10 +8,12 @@ local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 
 -- Placeholder variables
-local WS, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Spawning, Max_Crims, AutoUnlock
+local WS, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
 
 -- Toggles
 local Refill_Ammo = false
+local Spawning = false
+local loopStarted = false
 local AutoSpawn_AI = false
 local AutoUnlock_GP = false
 
@@ -102,23 +104,31 @@ end
 
 
 -- Spawning function
-function spawnCrims(Cell, Remote)
+function spawnCrims()
     Spawning = true
+
     local function loop()
+        loopStarted = true
+
         local start = tick()
-        local amt = tonumber(Crim_Amount.Text)
-        Remote:FireServer("MouseBtn1", 1)
+        local amt = tonumber(Crim_Amount.Text) + 1
+
+        Remote:FireServer("MouseBtn1", Max_Crims)
 
         repeat
             if tick() - start >= 2 then
                 loop()
             end
             task.wait(0.01)
-        until tonumber(Crim_Amount.Text) == amt + 1
+        until tonumber(Crim_Amount.Text) == amt
+
+        loopStarted = false
     end
 
     repeat
-        loop()
+        if not loopStarted then
+            loop()
+        end
     until tonumber(Crim_Amount.Text) == Max_Crims
 
     Spawning = false
@@ -127,16 +137,16 @@ end
 -- Checking function for spawning AI
 function manageCrims()
     Cell = getCell()
-    Remote = Cell:WaitForChild("Remotes"):WaitForChild("npcAssistance")
+    Remote = Cell.Remotes.npcAssistance
 
     local function handleAction()
         if not Spawning then
             if LocalPlyr.Backpack:FindFirstChild(Cell.Name) then
                 LocalPlyr.Character.Humanoid:EquipTool(Cell)
-                spawnCrims(Cell, Remote)
+                spawnCrims()
                 Cell.Parent = LocalPlyr.Backpack
             elseif LocalPlyr.Character:FindFirstChild(Cell.Name) then
-                spawnCrims(Cell, Remote)
+                spawnCrims()
                 Cell.Parent = LocalPlyr.Backpack
             end
         end
@@ -190,7 +200,7 @@ end
 -- For auto-unlocking GP upon death
 function unlockGP()
     Cell = getCell()
-    Remote = Cell:WaitForChild("Remotes"):WaitForChild("npcAssistance")
+    Remote = Cell.Remotes.npcAssistance
 
     if AutoUnlock_GP then
         unlockRemotes()
