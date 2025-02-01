@@ -120,7 +120,7 @@ function spawnCrims()
             loop()
         end
         task.wait(0.01)
-    until tonumber(Crim_Amount.Text) == Max_Crims
+    until tonumber(Crim_Amount.Text) == Max_Crims or not AutoSpawn_AI
 
     Spawning = false
 end
@@ -376,7 +376,7 @@ local shops_melee = tp:CreateButton({
 ----------------------
 
 local loc_divider = tp:CreateDivider({
-    title = "EXTRAS"
+    title = "Extras"
 })
 
 local loc_dropdown = tp:CreateDropdown({
