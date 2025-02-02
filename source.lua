@@ -11,13 +11,16 @@ local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 local WS, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
 
 -- Toggles
-local Refill_Ammo = false
-local Spawning = false
-local loopStarted = false
-local AutoSpawn_AI = false
-local AutoUnlock_GP = false
+local Toggles = {
+    Refill_Ammo = false,
+    Spawning = false,
+    AutoSpawn_AI = false,
+    AutoUnlock_GP = false
+}
 
--- Some qol stuff before the main script
+----------- [[ SOME EXTRA STUFF ]] -----------
+
+-- Handler for unintended changes to player walkspeed
 function setWalkSpeed(Humanoid)
     return Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
         if Humanoid.WalkSpeed ~= selected_WS and selected_WS ~= nil then
@@ -68,7 +71,7 @@ end
 
 -- Ammo function
 function getAmmo(Weapon)
-    if Refill_Ammo then
+    if Toggles["Refill_Ammo"] then
         originalCFrame = LocalPlyr.Character.HumanoidRootPart.CFrame
 
         for _, v in pairs(Workspace:WaitForChild("gsNew"):GetChildren()) do
@@ -80,13 +83,13 @@ function getAmmo(Weapon)
                         v.ProximityPrompt2.HoldDuration = 0
 
                         task.spawn(function()
-                            while Refill_Ammo do
+                            while Toggles["Refill_Ammo"] do
                                 Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, v.Position)
                                 task.wait(0.01)
                             end
                         end)
 
-                        while Refill_Ammo do
+                        while Toggles["Refill_Ammo"] do
                             fireproximityprompt(v.ProximityPrompt2)
                             task.wait(0.01)
                         end
@@ -105,24 +108,14 @@ end
 
 -- Spawning function
 function spawnCrims()
-    Spawning = true
-
-    local function loop()
-        loopStarted = true
-
-        Remote:FireServer("MouseBtn1", Max_Crims)
-
-        loopStarted = false
-    end
+    Toggles["Spawning"] = true
 
     repeat
-        if not loopStarted then
-            loop()
-        end
+        Remote:FireServer("MouseBtn1", Max_Crims)
         task.wait(0.01)
-    until tonumber(Crim_Amount.Text) == Max_Crims or not AutoSpawn_AI
+    until tonumber(Crim_Amount.Text) == Max_Crims or not Toggles["AutoSpawn_AI"]
 
-    Spawning = false
+    Toggles["Spawning"] = false
 end
 
 -- Checking function for spawning AI
@@ -131,7 +124,7 @@ function manageCrims()
     Remote = Cell.Remotes.npcAssistance
 
     local function handleAction()
-        if not Spawning then
+        if not Toggles["Spawning"] then
             if LocalPlyr.Backpack:FindFirstChild(Cell.Name) then
                 LocalPlyr.Character.Humanoid:EquipTool(Cell)
                 spawnCrims()
@@ -151,7 +144,7 @@ function manageCrims()
         end
     end
 
-    if AutoSpawn_AI then
+    if Toggles["AutoSpawn_AI"] then
         handleAction()
 
         AutoSpawn = Crim_Amount:GetPropertyChangedSignal("Text"):Connect(function()
@@ -193,7 +186,7 @@ function unlockGP()
     Cell = getCell()
     Remote = Cell.Remotes.npcAssistance
 
-    if AutoUnlock_GP then
+    if Toggles["AutoUnlock_GP"] then
         unlockRemotes()
 
         if not AutoUnlock then
@@ -257,7 +250,7 @@ local wep_select = main:CreateSelection({
 local ammo_toggle = main:CreateToggle({
     title = "Refill Ammo",
     callback = function()
-        Refill_Ammo = not Refill_Ammo
+        Toggles["Refill_Ammo"] = not Toggles["Refill_Ammo"]
         getAmmo(Weapon)
     end
 })
@@ -271,7 +264,7 @@ local crim_divider = main:CreateDivider({
 local auto_spawn = main:CreateToggle({
     title = "Auto-Spawn",
     callback = function()
-        AutoSpawn_AI = not AutoSpawn_AI
+        Toggles["AutoSpawn_AI"] = not Toggles["AutoSpawn_AI"]
         manageCrims()
     end
 })
@@ -296,7 +289,7 @@ local gp_divider = gp:CreateDivider({
 local gp_toggle = gp:CreateToggle({
     title = "Auto-Unlock",
     callback = function()
-        AutoUnlock_GP = not AutoUnlock_GP
+        Toggles["AutoUnlock_GP"] = not Toggles["AutoUnlock_GP"]
         unlockGP()
     end
 })
