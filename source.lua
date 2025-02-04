@@ -8,7 +8,7 @@ local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 
 -- Placeholder variables
-local WS, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
+local WS, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
 
 -- Toggles
 local Toggles = {
@@ -45,6 +45,53 @@ LocalPlyr.CharacterAdded:Connect(wsHandler)
 if LocalPlyr.Character then -- Initial set
     wsHandler(LocalPlyr.Character)
 end
+
+
+
+-- Handler for when the player is down for too long (this is to save Notoriety)
+function scanForWhenDownTypeSheee(char)
+    if scan1 or scan2 then
+        scan1:Disconnect()
+        scan1 = nil
+
+        scan2:Disconnect()
+        scan2 = nil
+    end
+
+    scan1 = char.ChildAdded:Connect(function(highlight)
+        if highlight:IsA("Highlight") then
+            originalCFrame = char.HumanoidRootPart.CFrame
+
+            Downed = true
+            local start = tick()
+
+            char.HumanoidRootPart.CFrame = CFrame.new(-1070, 211, -284)
+
+            while Downed do
+                if tick() - start >= 19 then
+                    LocalPlyr:Kick("Kicked to prevent Notoriety from being reset")
+                end
+                task.wait(0.01)
+            end
+        end
+    end)
+
+    scan2 = char.ChildRemoved:Connect(function(highlight)
+        if highlight:IsA("Highlight") then
+            Downed = false
+
+            char.HumanoidRootPart.CFrame = originalCFrame
+        end
+    end)
+end
+
+if LocalPlyr.Character then
+    scanForWhenDownTypeSheee(LocalPlyr.Character)
+end
+
+LocalPlyr.CharacterAdded:Connect(scanForWhenDownTypeSheee)
+
+
 
 -- Function to get cellphone tool
 function getCell()
