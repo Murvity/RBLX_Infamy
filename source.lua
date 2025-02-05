@@ -7,6 +7,7 @@ local Camera = Workspace.CurrentCamera
 local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 local Neutral = Workspace.NPCs.Neutral
+local streakEvent = Workspace.GameEvents.streakEvent
 
 -- Placeholder variables
 local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
@@ -16,6 +17,7 @@ local Toggles = {
     Refill_Ammo = false,
     Spawning = false,
     AutoSpawn_AI = false,
+    Collect_Streak = false,
     AutoUnlock_GP = false
 }
 
@@ -151,8 +153,6 @@ end
 
 
 
-
-
 -- Spawning function
 function spawnCrims()
     Toggles["Spawning"] = true
@@ -210,6 +210,24 @@ function manageCrims()
         AutoSpawn = nil
     end
 end
+
+
+
+-- Function to collect streaks (this just gives you money, medkits, grenades, etc.)
+function getStreaks()
+    local function startLoop()
+        while Toggles["Collect_Streak"] do
+            streakEvent:FireServer(math.random(50, 1000)) -- doesn't need to be randomized, 1k is max.
+            task.wait(0.01)
+        end
+    end
+
+    if Toggles["Collect_Streak"] then
+        task.spawn(startLoop)
+    end
+end
+
+
 
 ----------- [[ GAMEPASS FUNCTIONS ]] -----------
 
@@ -284,6 +302,28 @@ local main = ui:CreateTab({
 ----------------------
 
 local gun_divider = main:CreateDivider({
+    title = "Main"
+})
+
+local auto_spawn = main:CreateToggle({
+    title = "Auto-Spawn AI",
+    callback = function()
+        Toggles["AutoSpawn_AI"] = not Toggles["AutoSpawn_AI"]
+        manageCrims()
+    end
+})
+
+local auto_streak = main:CreateToggle({
+    title = "Auto-Streaks",
+    callback = function()
+        Toggles["Collect_Streak"] = not Toggles["Collect_Streak"]
+        getStreaks()
+    end
+})
+
+----------------------
+
+local gun_divider = main:CreateDivider({
     title = "Gun"
 })
 
@@ -301,23 +341,6 @@ local ammo_toggle = main:CreateToggle({
         getAmmo(Weapon)
     end
 })
-
-----------------------
-
-local crim_divider = main:CreateDivider({
-    title = "Criminal AI"
-})
-
-local auto_spawn = main:CreateToggle({
-    title = "Auto-Spawn",
-    callback = function()
-        Toggles["AutoSpawn_AI"] = not Toggles["AutoSpawn_AI"]
-        manageCrims()
-    end
-})
-
-
-
 
 
 
