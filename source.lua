@@ -303,19 +303,19 @@ local gun_divider = main:CreateDivider({
     title = "Main"
 })
 
+local auto_streak = main:CreateToggle({
+    title = "Autofarm",
+    callback = function()
+        Toggles["Collect_Streak"] = not Toggles["Collect_Streak"]
+        getStreaks()
+    end
+})
+
 local auto_spawn = main:CreateToggle({
     title = "Auto-Spawn AI",
     callback = function()
         Toggles["AutoSpawn_AI"] = not Toggles["AutoSpawn_AI"]
         manageCrims()
-    end
-})
-
-local auto_streak = main:CreateToggle({
-    title = "Auto-Streaks",
-    callback = function()
-        Toggles["Collect_Streak"] = not Toggles["Collect_Streak"]
-        getStreaks()
     end
 })
 
