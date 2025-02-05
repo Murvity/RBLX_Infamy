@@ -14,9 +14,9 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 Possibly more to be added in the future.
 
 ## Some things regarding the autofarm
-1. It only works if you are wanted.
-2. It gives rewards to you AND other players in your server.
-3. Your money may end up frozen until you leave the game. This is done because the game knows you're cheating.
+1. It only rewards those who are wanted.
+2. It rewards you AND other players in your server.
+3. Your money may end up frozen until you leave the server.
 
 --------------------------------------------------------
 
