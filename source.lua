@@ -218,7 +218,7 @@ function getStreaks()
     if Toggles["Collect_Streak"] then
         task.spawn(function()
             while Toggles["Collect_Streak"] do
-                streakEvent:FireServer(math.random(50, 1000)) -- doesn't need to be randomized, 1k is max.
+                streakEvent:FireServer(1000) -- doesn't need to be randomized, 1k is max.
                 task.wait(0.01)
             end
         end)
