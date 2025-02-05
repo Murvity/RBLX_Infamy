@@ -6,9 +6,10 @@ local Camera = Workspace.CurrentCamera
 
 local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
+local Neutral = Workspace.NPCs.Neutral
 
 -- Placeholder variables
-local WS, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
+local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
 
 -- Toggles
 local Toggles = {
@@ -21,14 +22,6 @@ local Toggles = {
 ----------- [[ SOME EXTRA STUFF ]] -----------
 
 -- Handler for unintended changes to player walkspeed
-function setWalkSpeed(Humanoid)
-    return Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-        if Humanoid.WalkSpeed ~= selected_WS and selected_WS ~= nil then
-            Humanoid.WalkSpeed = selected_WS
-        end
-    end)
-end
-
 function wsHandler(char)
     local Humanoid = char:WaitForChild("Humanoid")
 
@@ -37,13 +30,11 @@ function wsHandler(char)
         WS = nil
     end
 
-    WS = setWalkSpeed(Humanoid)
-end
-
-LocalPlyr.CharacterAdded:Connect(wsHandler)
-
-if LocalPlyr.Character then -- Initial set
-    wsHandler(LocalPlyr.Character)
+    WS = Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+        if Humanoid.WalkSpeed ~= selected_WS and selected_WS ~= nil then
+            Humanoid.WalkSpeed = selected_WS
+        end
+    end)
 end
 
 
@@ -85,12 +76,21 @@ function scanForWhenDownTypeSheee(char)
     end)
 end
 
+
+
+-- Initial sets
 if LocalPlyr.Character then
+    wsHandler(LocalPlyr.Character)
     scanForWhenDownTypeSheee(LocalPlyr.Character)
 end
 
-LocalPlyr.CharacterAdded:Connect(scanForWhenDownTypeSheee)
+-- For respawns
+function onCharAdded(character) 
+    wsHandler(character)
+    scanForWhenDownTypeSheee(character)
+end
 
+LocalPlyr.CharacterAdded:Connect(onCharAdded)
 
 
 -- Function to get cellphone tool
