@@ -23,6 +23,15 @@ local Toggles = {
 
 ----------- [[ SOME EXTRA STUFF ]] -----------
 
+-- Anti-AFK script from Infinite Yield
+LocalPlyr.Idled:Connect(function()
+    local VU = game:GetService("VirtualUser")
+    VU:CaptureController()
+    VU:ClickButton2(Vector2.new())
+end)
+
+
+
 -- Handler for unintended changes to player walkspeed
 function wsHandler(char)
     local Humanoid = char:WaitForChild("Humanoid")
@@ -218,7 +227,7 @@ function getStreaks()
     if Toggles["Collect_Streak"] then
         task.spawn(function()
             while Toggles["Collect_Streak"] do
-                streakEvent:FireServer(1000) -- doesn't need to be randomized, 1k is max.
+                streakEvent:FireServer(1000)
                 task.wait(0.01)
             end
         end)
