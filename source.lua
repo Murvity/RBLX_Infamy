@@ -20,6 +20,7 @@ local OnMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
 -- Placeholder variables
 local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
 
+local time = 0.18
 -- Toggles
 local Toggles = {
     Refill_Ammo = false,
@@ -254,7 +255,7 @@ function autoKill()
                 grenadeCreate:FireServer(v.PrimaryPart, LocalPlyr.Name)
             end
         end
-        task.wait(0.18)
+        task.wait(time)
     end
 end
 
@@ -346,8 +347,16 @@ local main = ui:CreateTab({
 
 ----------------------
 
-local gun_divider = main:CreateDivider({
+local main_divider = main:CreateDivider({
     title = "Main"
+})
+
+local auto_spawn = main:CreateToggle({
+    title = "Auto-Spawn AI",
+    callback = function()
+        Toggles["AutoSpawn_AI"] = not Toggles["AutoSpawn_AI"]
+        manageCrims()
+    end
 })
 
 local enable_all_pvp
@@ -369,19 +378,24 @@ else
     })
 end
 
-local auto_kill = main:CreateToggle({
-    title = "Auto-Kill",
-    callback = function()
-        Toggles["Grenade_Autokill"] = not Toggles["Grenade_Autokill"]
-        autoKill()
+----------------------
+
+local autokill_divider = main:CreateDivider({
+    title = "Auto-Kill"
+})
+
+local selected_time = main:CreateSelection({
+    title = "Time Delay",
+    callback2 = function(v)
+        time = tonumber(v) 
     end
 })
 
-local auto_spawn = main:CreateToggle({
-    title = "Auto-Spawn AI",
+local auto_kill = main:CreateToggle({
+    title = "Grenade Auto-Kill",
     callback = function()
-        Toggles["AutoSpawn_AI"] = not Toggles["AutoSpawn_AI"]
-        manageCrims()
+        Toggles["Grenade_Autokill"] = not Toggles["Grenade_Autokill"]
+        autoKill()
     end
 })
 
