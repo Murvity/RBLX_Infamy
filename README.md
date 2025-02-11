@@ -6,6 +6,7 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 ## Main Features
 
 * Server PvP Enabler
+* Auto-Kill
 * Auto-Spawn Criminal AI
 * ~~Autofarm (abuses streak system)~~
 * Auto-Refill Ammo
@@ -13,6 +14,10 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 * Teleports
 
 Possibly more to be added in the future.
+
+## Some things regarding the Auto-Kill feature
+1. It may lag your game since it's spamming grenades.
+2. It is not 100% accurate or optimized, but it somewhat works.
 
 
 --------------------------------------------------------
