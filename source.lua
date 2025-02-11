@@ -1,13 +1,17 @@
 -- Usual variables
 local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
 local LocalPlyr = Players.LocalPlayer
 local PlayerGui = LocalPlyr.PlayerGui
 local Camera = Workspace.CurrentCamera
 
+local OnMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
+
 local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 local Neutral = Workspace.NPCs.Neutral
-local streakEvent = Workspace.GameEvents.streakEvent
+local pvpEnable = Workspace.autoHealCustody.pvpBetaEnabled
+-- local streakEvent = Workspace.GameEvents.streakEvent
 
 -- Placeholder variables
 local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
@@ -17,6 +21,7 @@ local Toggles = {
     Refill_Ammo = false,
     Spawning = false,
     AutoSpawn_AI = false,
+    EnabledAll_PVP = false,
     Collect_Streak = false,
     AutoUnlock_GP = false
 }
@@ -110,7 +115,7 @@ function getCell()
 
     for _, v in pairs(LocalPlyr.Character:GetChildren()) do
         if v:IsA("Tool") and v.Name:find("Cell") then
-            Cellphone = v 
+            Cellphone = v
         end
     end
 
@@ -124,6 +129,7 @@ function getCell()
 
     return Cellphone
 end
+
 
 ----------- [[ MAIN FUNCTIONS ]] -----------
 
@@ -222,6 +228,19 @@ end
 
 
 
+-- PVP enabler
+function enablePVP()
+    for _, player in pairs(Players:GetPlayers()) do
+        if Toggles["EnabledAll_PVP"] then
+            pvpEnable:FireServer(true, player.Name)
+        else
+            pvpEnable:FireServer(false, player.Name)
+        end
+    end
+end
+
+
+
 -- Function to collect streaks (this just gives you money, medkits, grenades, etc.)
 --[[ function getStreaks()
     if Toggles["Collect_Streak"] then
@@ -311,6 +330,25 @@ local main = ui:CreateTab({
 local gun_divider = main:CreateDivider({
     title = "Main"
 })
+
+local enable_all_pvp
+if OnMobile then
+    enable_all_pvp = main:CreateToggle({
+        title = "Enable All PVP",
+        callback = function()
+            Toggles["EnabledAll_PVP"] = not Toggles["EnabledAll_PVP"]
+            enablePVP()
+        end
+    })
+else
+    enable_all_pvp = main:CreateKeybind({
+        title = "Enable All PVP",
+        callback = function()
+            Toggles["EnabledAll_PVP"] = not Toggles["EnabledAll_PVP"]
+            enablePVP()
+        end
+    })
+end
 
 local auto_spawn = main:CreateToggle({
     title = "Auto-Spawn AI",
