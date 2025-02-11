@@ -6,7 +6,7 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 ## Main Features
 
 * Server PvP Enabler
-* Auto-Kill
+* Grenade Auto-Kill
 * Auto-Spawn Criminal AI
 * ~~Autofarm (abuses streak system)~~
 * Auto-Refill Ammo
@@ -16,8 +16,9 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 Possibly more to be added in the future.
 
 ## Some things regarding the Auto-Kill feature
-1. It may lag your game since it's spamming grenades.
-2. It is not 100% accurate or optimized, but it somewhat works.
+1. Time Delay determines how often you want to spam grenades; the lower it is, the faster it is (recommended 0.15-0.2).
+2. It may lag your game since it's spamming grenades.
+3. It is not 100% accurate or optimized, but it somewhat works.
 
 
 --------------------------------------------------------
