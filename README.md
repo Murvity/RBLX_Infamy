@@ -17,7 +17,7 @@ Possibly more to be added in the future.
 
 ## Some things regarding the Auto-Kill feature
 1. Time Delay determines how often you want to spam grenades; the lower it is, the faster it is (recommended 0.15-0.2).
-2. It may lag your game since it's spamming grenades.
+2. It may lag your game depending on the delay.
 3. It is not 100% accurate or optimized, but it somewhat works.
 
 
