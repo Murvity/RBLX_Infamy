@@ -3,14 +3,18 @@ local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local LocalPlyr = Players.LocalPlayer
 local PlayerGui = LocalPlyr.PlayerGui
+
+local grenadeCreate = LocalPlyr.Character.playerMeleeAttack.grenadeCreate
+local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
+local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
+
 local Camera = Workspace.CurrentCamera
+local Neutral = Workspace.NPCs.Neutral
+local pvpEnable = Workspace.autoHealCustody.pvpBetaEnabled
+local policeForce = Workspace.NPCs.policeForce
 
 local OnMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
 
-local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
-local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
-local Neutral = Workspace.NPCs.Neutral
-local pvpEnable = Workspace.autoHealCustody.pvpBetaEnabled
 -- local streakEvent = Workspace.GameEvents.streakEvent
 
 -- Placeholder variables
@@ -19,6 +23,7 @@ local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFram
 -- Toggles
 local Toggles = {
     Refill_Ammo = false,
+    Grenade_Autokill = false,
     Spawning = false,
     AutoSpawn_AI = false,
     EnabledAll_PVP = false,
@@ -241,6 +246,20 @@ end
 
 
 
+-- Grenade autokill handler
+function autoKill()
+    while Toggles["Grenade_Autokill"] do
+        for _, v in pairs(policeForce:GetChildren()) do
+            if v:FindFirstChild("Humanoid") then
+                grenadeCreate:FireServer(v.PrimaryPart, LocalPlyr.Name)
+            end
+        end
+        task.wait(0.18)
+    end
+end
+
+
+
 -- Function to collect streaks (this just gives you money, medkits, grenades, etc.)
 --[[ function getStreaks()
     if Toggles["Collect_Streak"] then
@@ -257,7 +276,7 @@ end ]]
 
 ----------- [[ GAMEPASS FUNCTIONS ]] -----------
 
--- Function holders for remotes
+-- Function holders for gamepass remotes
 function unlockRemotes()
     Remote:FireServer("extraTurretSlotsPurchasedEvent", 82471)
     Remote:FireServer("grenadeTurretPurchasedEvent", 21556)
@@ -349,6 +368,14 @@ else
         end
     })
 end
+
+local auto_kill = main:CreateToggle({
+    title = "Auto-Kill",
+    callback = function()
+        Toggles["Grenade_Autokill"] = not Toggles["Grenade_Autokill"]
+        autoKill()
+    end
+})
 
 local auto_spawn = main:CreateToggle({
     title = "Auto-Spawn AI",
