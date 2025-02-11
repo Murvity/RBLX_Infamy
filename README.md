@@ -5,6 +5,7 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 
 ## Main Features
 
+* Server PvP Enabler
 * Auto-Spawn Criminal AI
 * ~~Autofarm (abuses streak system)~~
 * Auto-Refill Ammo
