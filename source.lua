@@ -14,13 +14,12 @@ local pvpEnable = Workspace.autoHealCustody.pvpBetaEnabled
 local policeForce = Workspace.NPCs.policeForce
 
 local OnMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
-
+local time = 0.18
 -- local streakEvent = Workspace.GameEvents.streakEvent
 
 -- Placeholder variables
 local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
 
-local time = 0.18
 -- Toggles
 local Toggles = {
     Refill_Ammo = false,
