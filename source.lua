@@ -223,7 +223,7 @@ end
 
 
 -- Function to collect streaks (this just gives you money, medkits, grenades, etc.)
-function getStreaks()
+--[[ function getStreaks()
     if Toggles["Collect_Streak"] then
         task.spawn(function()
             while Toggles["Collect_Streak"] do
@@ -232,7 +232,7 @@ function getStreaks()
             end
         end)
     end
-end
+end ]]
 
 
 
@@ -310,14 +310,6 @@ local main = ui:CreateTab({
 
 local gun_divider = main:CreateDivider({
     title = "Main"
-})
-
-local auto_streak = main:CreateToggle({
-    title = "Autofarm",
-    callback = function()
-        Toggles["Collect_Streak"] = not Toggles["Collect_Streak"]
-        getStreaks()
-    end
 })
 
 local auto_spawn = main:CreateToggle({
