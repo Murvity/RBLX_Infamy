@@ -6,17 +6,13 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 ## Main Features
 
 * Auto-Spawn Criminal AI
-* Autofarm (abuses streak system)
+* ~~Autofarm (abuses streak system)~~
 * Auto-Refill Ammo
 * Gamepass Access (Turrets and Jetpack)
 * Teleports
 
 Possibly more to be added in the future.
 
-## Some things regarding the autofarm
-1. It only rewards those who are wanted.
-2. It rewards you AND other players in your server.
-3. Your money may end up frozen until you leave the server.
 
 --------------------------------------------------------
 
