@@ -252,7 +252,7 @@ function autoKill()
         for _, v in pairs(policeForce:GetChildren()) do
             if v:FindFirstChild("Humanoid") then
                 if v.Humanoid.Health > 0 then
-                    grenadeCreate:FireServer(v.PrimaryPart.Position, LocalPlyr.Name)
+                    grenadeCreate:FireServer(v.PrimaryPart, LocalPlyr.Name)
                 end
             end
         end
