@@ -9,13 +9,15 @@ local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 
 local Camera = Workspace.CurrentCamera
-local Neutral = Workspace.NPCs.Neutral
 local pvpEnable = Workspace.autoHealCustody.pvpBetaEnabled
-local policeForce = Workspace.NPCs.policeForce
+-- local streakEvent = Workspace.GameEvents.streakEvent
+
+local NPCs = Workspace.NPCs
+local Neutral = NPCs.Neutral
+local policeForce = NPCs.policeForce
 
 local OnMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
 local time = 0.18
--- local streakEvent = Workspace.GameEvents.streakEvent
 
 -- Placeholder variables
 local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
@@ -72,13 +74,12 @@ function scanForWhenDownTypeSheee(char)
 
     scan1 = char.ChildAdded:Connect(function(highlight)
         if highlight:IsA("Highlight") then
-            originalCFrame = char.HumanoidRootPart.CFrame
-
             Downed = true
+            originalCFrame = char.HumanoidRootPart.CFrame
             local start = tick()
 
             char.HumanoidRootPart.CFrame = CFrame.new(-1070, 211, -284)
-
+            
             while Downed do
                 if tick() - start >= 19 then
                     LocalPlyr:Kick("Kicked to prevent Notoriety from being reset")
@@ -91,7 +92,6 @@ function scanForWhenDownTypeSheee(char)
     scan2 = char.ChildRemoved:Connect(function(highlight)
         if highlight:IsA("Highlight") then
             Downed = false
-
             char.HumanoidRootPart.CFrame = originalCFrame
         end
     end)
