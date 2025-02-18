@@ -24,4 +24,4 @@ Possibly more to be added in the future.
 --------------------------------------------------------
 
 
-       loadstring(game:HttpGet("https://raw.githubusercontent.com/Murvity/RBLX_Infamy/refs/heads/main/source.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Murvity/RBLX_Infamy/refs/heads/main/source.lua"))()
