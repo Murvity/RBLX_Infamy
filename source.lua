@@ -4,7 +4,7 @@ local UIS = game:GetService("UserInputService")
 local LocalPlyr = Players.LocalPlayer
 local PlayerGui = LocalPlyr.PlayerGui
 
-local grenadeCreate = LocalPlyr.Character.playerMeleeAttack.grenadeCreate
+-- local grenadeCreate = LocalPlyr.Character.playerMeleeAttack.grenadeCreate
 local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
 local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
 
@@ -247,7 +247,7 @@ end
 
 
 -- Grenade autokill handler
-function autoKill()
+--[[ function autoKill()
     while Toggles["Grenade_Autokill"] do
         for _, v in pairs(policeForce:GetChildren()) do
             if v:FindFirstChild("Humanoid") then
@@ -258,12 +258,12 @@ function autoKill()
         end
         task.wait(time)
     end
-end
+end 
 
 
 
 -- Function to collect streaks (this just gives you money, medkits, grenades, etc.)
---[[ function getStreaks()
+function getStreaks()
     if Toggles["Collect_Streak"] then
         task.spawn(function()
             while Toggles["Collect_Streak"] do
@@ -379,26 +379,6 @@ else
     })
 end
 
-----------------------
-
-local autokill_divider = main:CreateDivider({
-    title = "Auto-Kill"
-})
-
-local selected_time = main:CreateSelection({
-    title = "Time Delay",
-    callback2 = function(v)
-        time = tonumber(v) 
-    end
-})
-
-local auto_kill = main:CreateToggle({
-    title = "Grenade Auto-Kill",
-    callback = function()
-        Toggles["Grenade_Autokill"] = not Toggles["Grenade_Autokill"]
-        autoKill()
-    end
-})
 
 ----------------------
 
