@@ -5,15 +5,23 @@ This is a script for the game [Infamy](https://www.roblox.com/games/6182305461/I
 
 ## Main Features
 
-* Server PvP Enabler
-* ~~Grenade Auto-Kill~~
 * Auto-Spawn Criminal AI
-* ~~Autofarm (abuses streak system)~~
 * Auto-Refill Ammo
 * Gamepass Access (Turrets and Jetpack)
 * Teleports
 
 Possibly more to be added in the future.
+
+## Important
+
+As of 3/14/2025, many of the features in this script were patched. Here's all you need to know:
+
+* Automatically spawning criminal AI still works
+* Refilling ammo is much slower than before
+* Using the 'free' gamepass toggle will result in being kicked from the game after a short while
+
+Right now, I don't see any workarounds to these changes made by the creator. The most likely scenario here is that there is now proper server-side validation in the game. With that said, enjoy what's left of this script!
+
 
 
 --------------------------------------------------------
