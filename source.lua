@@ -6,7 +6,7 @@ local PlayerGui = LocalPlyr.PlayerGui
 
 -- local grenadeCreate = LocalPlyr.Character.playerMeleeAttack.grenadeCreate
 local Owns_Cap = PlayerGui.gamepassOwnershipReadOnly.ownsCaptain
-local Crim_Amount = PlayerGui.crimControlsGui.Frame.criminalCount
+local Crim_Amount = Workspace.playerStats["Kipsterrrr's Server Stats"].playerCriminalCount
 
 local Camera = Workspace.CurrentCamera
 local pvpEnable = Workspace.autoHealCustody.pvpBetaEnabled
@@ -16,8 +16,8 @@ local NPCs = Workspace.NPCs
 local Neutral = NPCs.Neutral
 local policeForce = NPCs.policeForce
 
-local OnMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
-local time = 0.18
+-- local OnMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
+-- local time = 0.18
 
 -- Placeholder variables
 local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFrame, AutoSpawn, Max_Crims, AutoUnlock
@@ -25,11 +25,11 @@ local WS, scan1, scan2, Downed, selected_WS, Cell, Remote, Weapon, originalCFram
 -- Toggles
 local Toggles = {
     Refill_Ammo = false,
-    Grenade_Autokill = false,
+    -- Grenade_Autokill = false,
     Spawning = false,
     AutoSpawn_AI = false,
-    EnabledAll_PVP = false,
-    Collect_Streak = false,
+    -- EnabledAll_PVP = false,
+    -- Collect_Streak = false,
     AutoUnlock_GP = false
 }
 
@@ -149,7 +149,7 @@ function getAmmo(Weapon)
                     if v.ProximityPrompt2.ActionText:find(Weapon) then
 
                         LocalPlyr.Character.HumanoidRootPart.CFrame = v.CFrame
-                        v.ProximityPrompt2.HoldDuration = 0
+                        v.ProximityPrompt2.HoldDuration = 0.5
 
                         task.spawn(function()
                             while Toggles["Refill_Ammo"] do
@@ -160,7 +160,7 @@ function getAmmo(Weapon)
 
                         while Toggles["Refill_Ammo"] do
                             fireproximityprompt(v.ProximityPrompt2)
-                            task.wait(0.01)
+                            task.wait(0.5)
                         end
                     end
                 end
@@ -179,8 +179,8 @@ function spawnCrims()
 
     repeat
         Remote:FireServer("MouseBtn1", Max_Crims)
-        task.wait(0.01)
-    until tonumber(Crim_Amount.Text) == Max_Crims or not Toggles["AutoSpawn_AI"]
+        task.wait(0.8)
+    until Crim_Amount.Value == Max_Crims or not Toggles["AutoSpawn_AI"]
 
     Toggles["Spawning"] = false
 end
@@ -214,8 +214,8 @@ function manageCrims()
     if Toggles["AutoSpawn_AI"] then
         handleAction()
 
-        AutoSpawn = Crim_Amount:GetPropertyChangedSignal("Text"):Connect(function()
-            if tonumber(Crim_Amount.Text) < Max_Crims then
+        AutoSpawn = Crim_Amount:GetPropertyChangedSignal("Value"):Connect(function()
+            if Crim_Amount.Value < Max_Crims then
                 handleAction()
             end
         end)
@@ -234,7 +234,7 @@ end
 
 
 -- PVP enabler
-function enablePVP()
+--[[ function enablePVP()
     for _, player in pairs(Players:GetPlayers()) do
         if Toggles["EnabledAll_PVP"] then
             pvpEnable:FireServer(true, player.Name)
@@ -247,7 +247,7 @@ end
 
 
 -- Grenade autokill handler
---[[ function autoKill()
+function autoKill()
     while Toggles["Grenade_Autokill"] do
         for _, v in pairs(policeForce:GetChildren()) do
             if v:FindFirstChild("Humanoid") then
@@ -359,25 +359,6 @@ local auto_spawn = main:CreateToggle({
         manageCrims()
     end
 })
-
-local enable_all_pvp
-if OnMobile then
-    enable_all_pvp = main:CreateToggle({
-        title = "Enable All PVP",
-        callback = function()
-            Toggles["EnabledAll_PVP"] = not Toggles["EnabledAll_PVP"]
-            enablePVP()
-        end
-    })
-else
-    enable_all_pvp = main:CreateKeybind({
-        title = "Enable All PVP",
-        callback = function()
-            Toggles["EnabledAll_PVP"] = not Toggles["EnabledAll_PVP"]
-            enablePVP()
-        end
-    })
-end
 
 
 ----------------------
